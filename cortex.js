@@ -3,15 +3,22 @@
 
 var REGEX_MATCH_NEURON = /[^;]\s*neuron\=[^;]+/;
 
+function dispose_cookie (key) {
+    var date = new Date();
+    date.setTime(date.getTime() + -1 * 24 * 60 * 60 * 1000);
+
+    document.cookie = key + '=; path=/; expires=' + date.toGMTString();
+}
+
 var handlers = {
     'mode-change': function (message) {
         var cookie = document.cookie;
 
         if ( REGEX_MATCH_NEURON.test(cookie) ) {
-            document.cookie = 'cortex_compress=';
-            document.cookie = 'cortex_combo=';
-            document.cookie = 'cortex_path=';
-            document.cookie = 'neuron=';
+            dispose_cookie('cortex_compress');
+            dispose_cookie('cortex_combo');
+            dispose_cookie('cortex_path');
+            dispose_cookie('neuron');
 
             send_icon_message(false);
 
