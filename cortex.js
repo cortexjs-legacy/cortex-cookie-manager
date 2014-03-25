@@ -10,6 +10,12 @@ function dispose_cookie (key) {
     document.cookie = key + '=; path=/; expires=' + date.toGMTString();
 }
 
+
+function set_cookie (key, value) {
+    document.cookie = key + '=' + value + '; path=/';
+}
+
+
 var handlers = {
     'mode-change': function (message) {
         var cookie = document.cookie;
@@ -23,13 +29,13 @@ var handlers = {
             send_icon_message(false);
 
         } else {
-            document.cookie = 'cortex_compress=false';
-            document.cookie = 'cortex_combo=false';
-            document.cookie = 'cortex_path=http://localhost:9074';
-            document.cookie = 'neuron=path=http://localhost:9074/mod';
+            set_cookie('cortex_compress', false);
+            set_cookie('cortex_combo', false);
+            set_cookie('cortex_path', 'http://localhost:9074');
+            set_cookie('neuron', 'path=http://localhost:9074/mod');
 
             send_icon_message(true);
-        } 
+        }
 
         location.reload();
     },
