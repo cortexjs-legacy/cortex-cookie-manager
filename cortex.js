@@ -32,7 +32,7 @@ var handlers = {
             set_cookie('cortex_compress', false);
             set_cookie('cortex_combo', false);
             set_cookie('cortex_path', 'http://localhost:9074');
-            set_cookie('neuron', 'path=http://localhost:9074/mod');
+            set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
 
             send_icon_message(true);
         }
