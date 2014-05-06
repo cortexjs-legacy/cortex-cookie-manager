@@ -1,3 +1,5 @@
+*.zip
+
 # Cortex project
 build/
 
