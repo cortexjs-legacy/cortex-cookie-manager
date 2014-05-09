@@ -13,15 +13,6 @@ function test_active (tab) {
     });
 }
 
-
-// on icon clicked
-chrome.browserAction.onClicked.addListener(function(tab){
-	chrome.tabs.sendMessage(tab.id, {
-        event: 'mode-change'
-    });
-});
-
-
 // update icon when tab switched
 chrome.tabs.onActivated.addListener(function (tab) {
     test_active(tab);
