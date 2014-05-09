@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Cortex Cookie Manager</title>
+    <style>
+    div:first-child {
+      margin-top: 0px;
+    }
+    div {
+      text-align: left;
+      padding: 1px 3px;
+      font-family: sans-serif;
+      font-size: 0.8em;
+      width: 120px;
+      margin-top: 1px;
+    }
+
+    </style>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <div>
+      <input type="checkbox" checked="checked" name="item" />domain_path <br/> 
+      <input type="checkbox" checked="checked" name="item" />copress <br/>  
+      <input type="checkbox" checked="checked" name="item" />combo <br/> 
+    </div>
+    <div class="confirm">
+      <input type="button" value="Add Selected" id="btnadd" />
+      <input type="button" value="Clear All" id="btnclear" />
+    </div>
+  </body>
+</html>
