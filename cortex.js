@@ -1,5 +1,4 @@
-// console.log(document.cookie, chrome);
-
+//console.log(document.cookie, chrome);
 var REGEX_MATCH_NEURON = /[^;]\s*neuron\=[^;]+/;
 
 function dispose_cookie(key) {
@@ -19,41 +18,31 @@ function set_cookie(key, value) {
 
 
 var handlers = {
-  'mode-change': function(message) {
+  'add-cookie': function(message) {
+
+    console.log(message.items);
     var cookie = document.cookie;
-
-    if (REGEX_MATCH_NEURON.test(cookie)) {
-      dispose_cookie('cortex_compress');
-      dispose_cookie('cortex_combo');
-      dispose_cookie('cortex_path');
-      dispose_cookie('neuron');
-
-      send_icon_message(false);
-
-    } else {
-      set_cookie('cortex_compress', false);
-      set_cookie('cortex_combo', false);
+    if (message.items & 0x04) 
       set_cookie('cortex_path', 'http://localhost:9074');
-      set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
-
-      send_icon_message(true);
-    }
-
+    if (message.items & 0x02)
+      set_cookie('cortex_compress', false); 
+    if (message.items & 0x01)
+       set_cookie('cortex_combo', false);
+    if (message.items)
+       set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
     location.reload();
   },
 
-  'test-activate': function(message) {
-    send_icon_message(REGEX_MATCH_NEURON.test(document.cookie));
+  'clear-cookie': function(message) {
+    dispose_cookie('cortex_path');
+    dispose_cookie('cortex_compress');
+    dispose_cookie('cortex_combo');
+    dispose_cookie('neuron');
+    location.reload();
   }
+
 };
 
-
-function send_icon_message(active) {
-  chrome.extension.sendMessage({
-    event: 'set-icon',
-    active: active
-  });
-}
 
 
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
