@@ -35,9 +35,21 @@ var handlers = {
     var cookie = document.cookie;
 
 
-      if(message.result2==true){set_cookie('cortex_compress', false);}else{dispose_cookie('cortex_compress');}
-      if(message.result3==true){set_cookie('cortex_combo', false);}else{dispose_cookie('cortex_combo');}
-      if(message.result1==true){set_cookie('cortex_path', 'http://localhost:9074');}else{dispose_cookie('cortex_path');}
+      if(message.result2==true){
+          set_cookie('cortex_compress', false);
+      }else{
+          dispose_cookie('cortex_compress');
+      }
+      if(message.result3==true){
+          set_cookie('cortex_combo', false);
+      }else{
+          dispose_cookie('cortex_combo');
+      }
+      if(message.result1==true){
+          set_cookie('cortex_path', 'http://localhost:9074');
+      }else{
+          dispose_cookie('cortex_path');
+      }
       set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
 
       send_icon_message(true);
