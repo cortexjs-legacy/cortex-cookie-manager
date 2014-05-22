@@ -19,25 +19,40 @@ function set_cookie(key, value) {
 
 
 var handlers = {
-  'mode-change': function(message) {
-    var cookie = document.cookie;
+  'init':function(){
 
     if (REGEX_MATCH_NEURON.test(cookie)) {
-      dispose_cookie('cortex_compress');
       dispose_cookie('cortex_combo');
       dispose_cookie('cortex_path');
+      dispose_cookie('cortex_compress');
       dispose_cookie('neuron');
 
       send_icon_message(false);
+      location.reload();
+    }
+  },
+  'mode-change': function(message) {
+    var cookie = document.cookie;
 
-    } else {
-      set_cookie('cortex_compress', false);
-      set_cookie('cortex_combo', false);
-      set_cookie('cortex_path', 'http://localhost:9074');
+
+      if(message.result2==true){
+          set_cookie('cortex_compress', false);
+      }else{
+          dispose_cookie('cortex_compress');
+      }
+      if(message.result3==true){
+          set_cookie('cortex_combo', false);
+      }else{
+          dispose_cookie('cortex_combo');
+      }
+      if(message.result1==true){
+          set_cookie('cortex_path', 'http://localhost:9074');
+      }else{
+          dispose_cookie('cortex_path');
+      }
       set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
 
       send_icon_message(true);
-    }
 
     location.reload();
   },
@@ -63,3 +78,4 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 
   handler && handler(message);
 });
+

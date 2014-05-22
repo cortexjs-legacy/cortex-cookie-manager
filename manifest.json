@@ -27,6 +27,7 @@
 
     "browser_action": {
         "default_title": "Switch cortex debug mode",
-        "default_icon": "i/icon-active-64.png"
+        "default_icon": "i/icon-active-64.png",
+        "default_popup":"popup.html"
     }
 }
