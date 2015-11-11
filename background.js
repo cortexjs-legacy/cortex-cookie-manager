@@ -6,16 +6,11 @@ function update_icon(active) {
     });
 }
 
-
-function test_active (tab) {
-    chrome.tabs.sendMessage(tab.id, {
+// update icon when tab switched
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+    chrome.tabs.sendMessage(activeInfo.tabId, {
         event: 'test-activate'
     });
-}
-
-// update icon when tab switched
-chrome.tabs.onActivated.addListener(function (tab) {
-    test_active(tab);
 });
 
 
