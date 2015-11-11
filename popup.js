@@ -2,26 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 document.addEventListener('DOMContentLoaded', function () {
-    document.addEventListener('click',function(){
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {event: 'query-status'}, function (res) {
+            document.getElementById("domainpath").checked = res.domainpath;
+            document.getElementById("compress").checked = res.compress;
+            document.getElementById("combo").checked = res.combo;
+        });
+        document.addEventListener('change',function(){
             var item1;var item2;var item3;
-			if(document.getElementById("domainpath").checked){
-                item1=true;
-            }else{
-                item1=false;
-            }
-			if(document.getElementById("compress").checked){
-                item2=true;
-            }else{
-                item2=false;
-            }
-			if(document.getElementById("combo").checked){
-                item3=true;
-            }else{
-                item3=false;
-            }
+			item1 = !!document.getElementById("domainpath").checked;
+			item2 = !!document.getElementById("compress").checked;
+			item3 = !!document.getElementById("combo").checked;
 			chrome.tabs.sendMessage(tabs[0].id,{
-                event: 'mode-change',result1:item1,result2:item2,result3:item3
+                event: 'mode-change', result1:item1,result2:item2,result3:item3
             });
         });
     });

@@ -1,7 +1,5 @@
 // console.log(document.cookie, chrome);
 
-var REGEX_MATCH_NEURON = /[^;]\s*neuron\=[^;]+/;
-
 function dispose_cookie(key) {
   var date = new Date();
   date.setTime(date.getTime() + -1 * 24 * 60 * 60 * 1000);
@@ -17,24 +15,14 @@ function set_cookie(key, value) {
   document.cookie = key + '=' + value + '; path=/';
 }
 
+function get_cookie(sKey) {
+    if (!sKey) { return null; }
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+}
 
 var handlers = {
-  'init':function(){
-
-    if (REGEX_MATCH_NEURON.test(cookie)) {
-      dispose_cookie('cortex_combo');
-      dispose_cookie('cortex_path');
-      dispose_cookie('cortex_compress');
-      dispose_cookie('neuron');
-
-      send_icon_message(false);
-      location.reload();
-    }
-  },
   'mode-change': function(message) {
-    var cookie = document.cookie;
-
-
+      var protocol = location.protocol;
       if(message.result2==true){
           set_cookie('cortex_compress', false);
       }else{
@@ -46,20 +34,31 @@ var handlers = {
           dispose_cookie('cortex_combo');
       }
       if(message.result1==true){
-          set_cookie('cortex_path', 'http://localhost:9074');
+          set_cookie('cortex_path', protocol + '//localhost:9074');
       }else{
           dispose_cookie('cortex_path');
       }
-      set_cookie('neuron', 'path=http://localhost:9074/mod,ext=.js');
-
-      send_icon_message(true);
+      if (message.result1 || message.result2 || message.result3) {
+          set_cookie('neuron', 'path=' + protocol + '//localhost:9074/mod,ext=.js');
+      } else {
+          dispose_cookie('neuron');
+      }
+      send_icon_message(message.result1 || message.result2 || message.result3);
 
     location.reload();
   },
 
   'test-activate': function(message) {
-    send_icon_message(REGEX_MATCH_NEURON.test(document.cookie));
-  }
+    send_icon_message(get_cookie('neuron'));
+  },
+
+    'query-status': function (message, sender, sendResponse) {
+        sendResponse({
+            domainpath: !!get_cookie('cortex_path'),
+            compress: !!get_cookie('cortex_compress'),
+            combo: !!get_cookie('cortex_combo')
+        })
+    }
 };
 
 
@@ -71,11 +70,11 @@ function send_icon_message(active) {
 }
 
 
-chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   var event = message.event;
 
   var handler = handlers[event];
 
-  handler && handler(message);
+  handler && handler(message, sender, sendResponse);
 });
 
